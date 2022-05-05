@@ -18,7 +18,7 @@ public class Server {
         System.out.println("Сервер: сервер запущен");
         while (true) {
             Socket client = server.accept();
-            new SimpleServer(client).start();
+            new SimpleServer(client, handlers).start();
         }
     }
 
@@ -48,9 +48,11 @@ public class Server {
 
 class SimpleServer extends Thread {
     private Socket client;
+    private Map<String, Greetable> handlers;
 
-    public SimpleServer(Socket client) {
+    public SimpleServer(Socket client, Map<String, Greetable> handlers) {
         this.client = client;
+        this.handlers = handlers;
     }
 
     @Override
@@ -72,7 +74,9 @@ class SimpleServer extends Thread {
             String command = parsed[0];
             String username = parsed[1];
 
-            bwriter.write("Это результат обработки запроса " + data);
+            String response = handlers.get(command).buildResponse(username);
+
+            bwriter.write("Это результат обработки запроса " + response);
             bwriter.newLine();
             bwriter.flush();
 
