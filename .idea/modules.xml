@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/simple-idea-project.iml" filepath="$PROJECT_DIR$/simple-idea-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/demo-socket-multithread.iml" filepath="$PROJECT_DIR$/.idea/demo-socket-multithread.iml" />
     </modules>
   </component>
 </project>
