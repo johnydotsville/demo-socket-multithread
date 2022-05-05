@@ -4,16 +4,45 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDateTime;
+import java.util.*;
+
+import johny.dotsville.greetable.Greetable;
 
 public class Server {
     public static void main(String[] args) throws IOException {
         // Максимальное количество соединений, которые должен принять сокет (по дефолту 50)
         ServerSocket server = new ServerSocket(25225, 500);
+
+        Map<String, Greetable> handlers = loadHandlers();
+
         System.out.println("Сервер: сервер запущен");
         while (true) {
             Socket client = server.accept();
             new SimpleServer(client).start();
         }
+    }
+
+    private static Map<String, Greetable> loadHandlers() throws IOException {
+        Properties props = new Properties();
+        try (InputStream is = Server.class.getClassLoader().getResourceAsStream("server.properties")) {
+            props.load(is);
+        }
+        Map<String, Greetable> handlers = new HashMap<>();
+        for (Object key : props.keySet()) {
+            String propName = key.toString();
+            Greetable handler = getHandler(props.getProperty(propName));
+            handlers.put(propName, handler);
+        }
+        return handlers;
+    }
+
+    private static Greetable getHandler(String handlerClassName) {
+        try {
+            return (Greetable) Class.forName(handlerClassName).getConstructor().newInstance();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null; // Говно
     }
 }
 
