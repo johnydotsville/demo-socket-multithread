@@ -39,7 +39,9 @@ class SimpleServer extends Thread {
 
             String data = breader.readLine();
             System.out.println("Сервер: сервер получил запрос: " + data + ". Время: " + LocalDateTime.now());
-            Thread.sleep(2000);
+            String[] parsed = data.split("\\s+");
+            String command = parsed[0];
+            String username = parsed[1];
 
             bwriter.write("Это результат обработки запроса " + data);
             bwriter.newLine();

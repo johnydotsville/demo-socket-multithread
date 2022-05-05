@@ -6,13 +6,17 @@ import java.time.LocalDateTime;
 
 public class Client {
     public static void main(String[] args) {
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 5; i++) {
             new SimpleClient(i).start();
         }
     }
 }
 
 class SimpleClient extends Thread {
+    private static final String[] commands = {
+        "HELLO", "MORNING", "DAY", "EVENING"
+    };
+
     private int requestId;
 
     public SimpleClient(int requestId) {
@@ -35,9 +39,11 @@ class SimpleClient extends Thread {
             BufferedReader breader = new BufferedReader(new InputStreamReader(sis));
             BufferedWriter bwriter = new BufferedWriter(new OutputStreamWriter(sos));
 
-            String requestId = Integer.toString(this.requestId);
-            System.out.println("Клиент: запрос " + requestId + " отправлен на сервер");
-            bwriter.write(requestId);
+            String username = "JohNy";
+            String command = commands[requestId % commands.length];
+            String request = command + " " + username;
+            System.out.println("Клиент: запрос " + requestId + " отправлен на сервер: " + request);
+            bwriter.write(request);
             bwriter.newLine();
             bwriter.flush();
 
