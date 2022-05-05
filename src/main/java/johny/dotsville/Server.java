@@ -74,7 +74,7 @@ class SimpleServer extends Thread {
             String command = parsed[0];
             String username = parsed[1];
 
-            String response = handlers.get(command).buildResponse(username);
+            String response = buildResponse(command, username);
 
             bwriter.write("Это результат обработки запроса " + response);
             bwriter.newLine();
@@ -87,5 +87,13 @@ class SimpleServer extends Thread {
         } catch (Exception ex) {
             ex.printStackTrace(System.out);
         }
+    }
+
+    private String buildResponse(String command, String username) {
+        Greetable handler = handlers.get(command);
+        if (handler != null) {
+            handler.buildResponse(username);
+        }
+        return "Обработчик не найден";
     }
 }
